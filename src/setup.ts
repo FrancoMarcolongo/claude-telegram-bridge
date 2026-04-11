@@ -87,6 +87,46 @@ async function main() {
     console.log("  Install it with: npm install -g @anthropic-ai/claude-code\n");
   }
 
+  // Step 6: Voice message support
+  console.log("\n  STEP 6: Voice Messages (optional)\n");
+  console.log("  Voice messages let you speak into Telegram and have it");
+  console.log("  transcribed locally using Whisper (free, any language).\n");
+
+  let voiceEnabled = false;
+  let hasWhisper = false;
+  let hasFfmpeg = false;
+
+  try {
+    execSync("whisper --help 2>&1", { timeout: 5000 });
+    hasWhisper = true;
+  } catch { /* not installed */ }
+
+  try {
+    execSync("ffmpeg -version 2>/dev/null", { timeout: 5000 });
+    hasFfmpeg = true;
+  } catch { /* not installed */ }
+
+  if (hasWhisper && hasFfmpeg) {
+    console.log("  Whisper and ffmpeg are already installed!\n");
+    voiceEnabled = true;
+  } else {
+    if (!hasFfmpeg) console.log("  ffmpeg: NOT FOUND — install with: brew install ffmpeg");
+    if (!hasWhisper) console.log("  whisper: NOT FOUND — install with: pip install openai-whisper");
+    console.log("");
+    const installVoice = await ask("  Install voice dependencies now? (y/n): ");
+    if (installVoice.toLowerCase() === "y") {
+      console.log("");
+      if (!hasFfmpeg) {
+        console.log("  Run: brew install ffmpeg");
+      }
+      if (!hasWhisper) {
+        console.log("  Run: pip install openai-whisper");
+      }
+      console.log("\n  Install those manually, then voice will work automatically.\n");
+    }
+    voiceEnabled = hasWhisper && hasFfmpeg;
+  }
+
   // Write .env
   const envPath = resolve(process.cwd(), ".env");
   const envContent = [
@@ -116,6 +156,11 @@ async function main() {
       processTimeoutMs: 300000,
     },
     projects: Object.keys(projects).length > 0 ? projects : undefined,
+    voice: {
+      enabled: voiceEnabled,
+      whisperModel: "base",
+      language: "auto",
+    },
     defaults: {
       workingDir: "~",
       streamUpdateIntervalMs: 2000,
@@ -125,8 +170,8 @@ async function main() {
   writeFileSync(configPath, toYaml(config, { indent: 2 }));
   console.log(`  Written: config.yaml`);
 
-  // Step 6: Test bot connection
-  console.log("\n  STEP 6: Testing bot connection...\n");
+  // Step 7: Test bot connection
+  console.log("\n  STEP 7: Testing bot connection...\n");
   try {
     const res = await fetch(`https://api.telegram.org/bot${botToken}/getMe`);
     const data = (await res.json()) as { ok: boolean; result?: { username: string } };

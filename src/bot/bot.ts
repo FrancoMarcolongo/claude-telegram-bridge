@@ -24,7 +24,9 @@ import {
 } from "./handlers/commands.js";
 import { initCallbacks, handleCallback } from "./handlers/callbacks.js";
 import { initFileHandler, handleFile } from "./handlers/file.js";
+import { initVoiceHandler, handleVoice } from "./handlers/voice.js";
 import { mainKeyboard } from "./keyboards.js";
+import { checkWhisperAvailable, checkFfmpegAvailable } from "../voice/transcribe.js";
 import { logger } from "../utils/logger.js";
 
 // Global kill switch state
@@ -44,6 +46,19 @@ export function createBot(token: string, config: BridgeConfig) {
   initCommands(config, sessionManager, messageQueue);
   initCallbacks(config, sessionManager, messageQueue);
   initFileHandler(config, sessionManager, messageQueue, processMessage);
+  initVoiceHandler(config, sessionManager, messageQueue);
+
+  // Check voice dependencies
+  if (config.voice.enabled) {
+    const whisperOk = checkWhisperAvailable(config.voice.whisperCommand);
+    const ffmpegOk = checkFfmpegAvailable();
+    if (whisperOk && ffmpegOk) {
+      logger.info({ model: config.voice.whisperModel, language: config.voice.language }, "Voice transcription ready");
+    } else {
+      if (!whisperOk) logger.warn("Whisper not found. Voice messages won't work. Install: pip install openai-whisper");
+      if (!ffmpegOk) logger.warn("ffmpeg not found. Voice messages won't work. Install: brew install ffmpeg");
+    }
+  }
 
   // === Middleware chain (order matters) ===
 
@@ -109,6 +124,7 @@ export function createBot(token: string, config: BridgeConfig) {
   // === File handlers ===
   bot.on("message:photo", handleFile);
   bot.on("message:document", handleFile);
+  bot.on("message:voice", handleVoice);
 
   // === Text message handler (must be last) ===
   const messageHandler = createMessageHandler(config, sessionManager, messageQueue);
