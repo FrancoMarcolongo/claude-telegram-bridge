@@ -1,0 +1,48 @@
+# Claude Telegram Bridge configuration
+# Copy this to config.yaml and edit with your values
+
+telegram:
+  # Your Telegram numeric user ID (find via @userinfobot)
+  allowedUserIds:
+    - 123456789
+  # Max messages per minute per user
+  rateLimitPerMinute: 10
+
+security:
+  # Require PIN on first interaction
+  requirePin: false
+  # Max active sessions
+  maxConcurrentSessions: 3
+
+claude:
+  # Default model: haiku, sonnet, opus
+  defaultModel: "sonnet"
+  # Effort level: low, medium, high, max
+  defaultEffort: "high"
+  # Max cost per single invocation (USD)
+  maxBudgetUsd: 5.0
+  # Tools Claude can use (per-project overrides below)
+  defaultTools:
+    - "Bash"
+    - "Edit"
+    - "Read"
+    - "Write"
+    - "Glob"
+    - "Grep"
+  # Kill claude process after this many ms
+  processTimeoutMs: 300000
+
+# Named projects with their paths and optional overrides
+projects:
+  # example:
+  #   path: "/Users/you/projects/my-app"
+  #   allowedTools: ["Read", "Glob", "Grep"]  # read-only
+  #   model: "opus"
+  #   effort: "max"
+  #   maxBudgetUsd: 10.0
+
+defaults:
+  # Working directory when no project is selected
+  workingDir: "~"
+  # How often to update the Telegram message with streamed text (ms)
+  streamUpdateIntervalMs: 2000
