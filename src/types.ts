@@ -17,6 +17,12 @@ export interface BridgeConfig {
     processTimeoutMs: number;
   };
   projects: Record<string, ProjectConfig>;
+  voice: {
+    enabled: boolean;
+    whisperModel: string;
+    language: string;
+    whisperCommand: string;
+  };
   defaults: {
     workingDir: string;
     streamUpdateIntervalMs: number;

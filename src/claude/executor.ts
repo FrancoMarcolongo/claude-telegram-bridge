@@ -73,7 +73,7 @@ interface LiveProcess {
 
 const liveProcesses = new Map<string, LiveProcess>(); // sessionId -> process
 
-const IDLE_TIMEOUT_MS = 5 * 60 * 1000; // Kill process after 5 min of inactivity
+const IDLE_TIMEOUT_MS = 30 * 60 * 1000; // Kill process after 30 min of inactivity
 
 /**
  * Send a message to an interactive Claude process.

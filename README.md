@@ -19,6 +19,17 @@ Phone (Telegram) --> Telegram Bot API --> This App --> Claude Code CLI
 - **Claude Code** CLI installed and authenticated (`npm install -g @anthropic-ai/claude-code`)
 - A **Telegram account**
 
+### Optional: Voice messages
+
+To use Telegram voice messages (transcribed locally, no API costs):
+
+```bash
+brew install ffmpeg
+pip install openai-whisper
+```
+
+Whisper auto-downloads the model (~150MB) on first use. Supports all languages.
+
 ## Quick Start
 
 ```bash
@@ -90,6 +101,8 @@ npm run dev
 - **Project switching** — quickly change working directories
 - **Per-project tool whitelists** — restrict what Claude can do per project
 - **File uploads** — send photos/documents from your phone to Claude
+- **Voice messages** — speak into Telegram, transcribed locally via Whisper (any language)
+- **Interactive skills** — Claude Code skills (`/commit`, `/review`, etc.) work with follow-up questions
 - **Cost tracking** — per-session and total cost display
 - **Code formatting** — proper code blocks in Telegram messages
 - **Message queuing** — messages queue up if Claude is busy
@@ -118,6 +131,9 @@ See `config.example.yaml` for all options. Key settings:
 - `claude.maxBudgetUsd` — max cost per invocation
 - `projects.<name>.path` — project directory
 - `projects.<name>.allowedTools` — per-project tool override
+- `voice.enabled` — enable/disable voice messages (default: true)
+- `voice.whisperModel` — Whisper model: tiny, base, small, medium, large
+- `voice.language` — language code ("es", "en") or "auto" to detect
 
 ## Running in Background
 

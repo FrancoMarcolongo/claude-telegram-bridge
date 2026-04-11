@@ -32,6 +32,12 @@ const configSchema = z.object({
     processTimeoutMs: z.number().positive().default(300_000),
   }),
   projects: z.record(z.string(), projectSchema).default({}),
+  voice: z.object({
+    enabled: z.boolean().default(true),
+    whisperModel: z.string().default("base"),
+    language: z.string().default("auto"),
+    whisperCommand: z.string().default("whisper"),
+  }).default({}),
   defaults: z.object({
     workingDir: z.string().default("~"),
     streamUpdateIntervalMs: z.number().positive().default(2000),

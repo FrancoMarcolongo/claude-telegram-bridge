@@ -32,6 +32,18 @@ claude:
   # Kill claude process after this many ms
   processTimeoutMs: 300000
 
+# Voice message transcription (local Whisper — no API costs)
+# Requires: pip install openai-whisper && brew install ffmpeg
+voice:
+  enabled: true
+  # Whisper model: tiny, base, small, medium, large
+  # base is a good balance of speed/accuracy
+  whisperModel: "base"
+  # Language: "auto" to detect, or "es", "en", etc.
+  language: "auto"
+  # Path to whisper binary (default assumes it's in PATH)
+  whisperCommand: "whisper"
+
 # Named projects with their paths and optional overrides
 projects:
   # example:
