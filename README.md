@@ -5,7 +5,7 @@ A local proxy that lets you interact with [Claude Code](https://docs.anthropic.c
 ## How it works
 
 ```
-Phone (Telegram) --> Telegram Bot API --> Your Mac (this app) --> Claude Code CLI
+Phone (Telegram) --> Telegram Bot API --> This App --> Claude Code CLI
 ```
 
 - Messages you send on Telegram get forwarded to `claude -p` running locally
