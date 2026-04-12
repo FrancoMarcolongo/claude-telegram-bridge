@@ -33,15 +33,14 @@ export class SessionManager {
   }
 
   createSession(chatId: number, projectKey?: string, name?: string): Session {
-    const effectiveProjectKey = projectKey || this.config.defaults.defaultProject;
-    const project = effectiveProjectKey ? this.config.projects[effectiveProjectKey] : undefined;
+    const project = projectKey ? this.config.projects[projectKey] : undefined;
     const sessionId = uuidv4();
 
     const session: Session = {
       id: sessionId,
       chatId,
-      name: name || (effectiveProjectKey ? `${effectiveProjectKey}-${Date.now()}` : `session-${Date.now()}`),
-      projectKey: effectiveProjectKey || null,
+      name: name || (projectKey ? `${projectKey}-${Date.now()}` : `session-${Date.now()}`),
+      projectKey: projectKey || null,
       workingDir: project?.path || this.config.defaults.workingDir,
       model: project?.model || this.config.claude.defaultModel,
       effort: project?.effort || this.config.claude.defaultEffort,

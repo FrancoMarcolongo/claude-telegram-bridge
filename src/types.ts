@@ -24,7 +24,6 @@ export interface BridgeConfig {
     whisperCommand: string;
   };
   defaults: {
-    defaultProject?: string;
     workingDir: string;
     streamUpdateIntervalMs: number;
   };

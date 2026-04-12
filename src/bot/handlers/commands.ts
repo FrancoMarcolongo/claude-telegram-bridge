@@ -50,7 +50,10 @@ export async function handleNew(ctx: Context) {
     return;
   }
 
-  const session = sessionManager.createSession(chatId, projectKey || undefined, name);
+  // Default to the current session's project when no project is specified
+  const effectiveProject = projectKey || sessionManager.getActiveSession(chatId)?.projectKey || undefined;
+
+  const session = sessionManager.createSession(chatId, effectiveProject, name);
 
   await ctx.reply(
     `<b>New session created</b>\n` +

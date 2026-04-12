@@ -40,7 +40,6 @@ const configSchema = z.object({
     whisperCommand: z.string().default("whisper"),
   }).default({}),
   defaults: z.object({
-    defaultProject: z.string().optional(),
     workingDir: z.string().default("~"),
     streamUpdateIntervalMs: z.number().positive().default(2000),
   }),
