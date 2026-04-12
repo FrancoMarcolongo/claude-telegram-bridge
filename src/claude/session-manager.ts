@@ -33,14 +33,15 @@ export class SessionManager {
   }
 
   createSession(chatId: number, projectKey?: string, name?: string): Session {
-    const project = projectKey ? this.config.projects[projectKey] : undefined;
+    const effectiveProjectKey = projectKey || this.config.defaults.defaultProject;
+    const project = effectiveProjectKey ? this.config.projects[effectiveProjectKey] : undefined;
     const sessionId = uuidv4();
 
     const session: Session = {
       id: sessionId,
       chatId,
-      name: name || (projectKey ? `${projectKey}-${Date.now()}` : `session-${Date.now()}`),
-      projectKey: projectKey || null,
+      name: name || (effectiveProjectKey ? `${effectiveProjectKey}-${Date.now()}` : `session-${Date.now()}`),
+      projectKey: effectiveProjectKey || null,
       workingDir: project?.path || this.config.defaults.workingDir,
       model: project?.model || this.config.claude.defaultModel,
       effort: project?.effort || this.config.claude.defaultEffort,
@@ -132,6 +133,11 @@ export class SessionManager {
   getEffectiveBudget(session: Session): number {
     const project = this.getProjectConfig(session);
     return project?.maxBudgetUsd || this.config.claude.maxBudgetUsd;
+  }
+
+  getEffectivePermissionMode(session: Session): string {
+    const project = this.getProjectConfig(session);
+    return project?.permissionMode || this.config.claude.defaultPermissionMode;
   }
 
   deleteSession(sessionId: string): boolean {
