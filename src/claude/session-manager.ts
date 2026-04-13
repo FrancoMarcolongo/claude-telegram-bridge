@@ -134,6 +134,11 @@ export class SessionManager {
     return project?.maxBudgetUsd || this.config.claude.maxBudgetUsd;
   }
 
+  getEffectivePermissionMode(session: Session): string {
+    const project = this.getProjectConfig(session);
+    return project?.permissionMode || this.config.claude.defaultPermissionMode;
+  }
+
   deleteSession(sessionId: string): boolean {
     const session = this.sessions.get(sessionId);
     if (!session) return false;

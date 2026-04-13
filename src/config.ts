@@ -11,6 +11,7 @@ const projectSchema = z.object({
   model: z.string().optional(),
   effort: z.string().optional(),
   maxBudgetUsd: z.number().positive().optional(),
+  permissionMode: z.string().optional(),
 });
 
 const configSchema = z.object({
@@ -83,8 +84,8 @@ export function loadConfig(): BridgeConfig {
   // Resolve ~ in working directories
   const home = process.env.HOME || "/tmp";
   const config = result.data;
-  if (config.defaults.workingDir === "~") {
-    config.defaults.workingDir = home;
+  if (config.defaults.workingDir.startsWith("~")) {
+    config.defaults.workingDir = config.defaults.workingDir.replace("~", home);
   }
   for (const project of Object.values(config.projects)) {
     if (project.path.startsWith("~")) {

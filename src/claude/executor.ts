@@ -342,6 +342,11 @@ function buildArgs(options: ExecuteOptions, interactive: boolean): string[] {
     args.push("--name", options.sessionName);
   }
 
+  args.push(
+    "--append-system-prompt",
+    "You are running through a Telegram bridge. The user cannot approve permission prompts or interact with interactive CLI tools. Avoid actions that require interactive approval. Do not run bash commands that require user input. Prefer reading/writing files directly over shell commands when possible.",
+  );
+
   return args;
 }
 

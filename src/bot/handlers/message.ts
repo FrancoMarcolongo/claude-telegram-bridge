@@ -91,7 +91,7 @@ export async function processMessage(ctx: Context, text: string): Promise<void> 
         workingDir: session.workingDir,
         model: session.model,
         effort: session.effort,
-        permissionMode: config.claude.defaultPermissionMode,
+        permissionMode: sessionManager.getEffectivePermissionMode(session),
         allowedTools: sessionManager.getEffectiveTools(session),
         maxBudgetUsd: sessionManager.getEffectiveBudget(session),
         sessionName: session.name,

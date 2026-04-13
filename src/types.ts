@@ -35,6 +35,7 @@ export interface ProjectConfig {
   model?: string;
   effort?: string;
   maxBudgetUsd?: number;
+  permissionMode?: string;
 }
 
 export interface Session {
